@@ -1,4 +1,4 @@
-# LungVision-AI
+# 🫁LungVision-AI
 
 - End-to-End AI System for Lung Cancer Detection from CT Scans
 
@@ -39,23 +39,23 @@ Dataset -
 
 # TECHNICAL STACK
 
-# Machine Learning / AI -
+Machine Learning / AI -
 (i) PyTorch + TorchVision
 (ii) ResNet50 (ImageNet pretrained, fine-tuned on CT scans)
 (iii) Grad-CAM for visual explainability
 (iv) LLaMA 3.1 (via Groq API) for natural language explanations
 
-# Backend -
+Backend -
 (i) FastAPI
 (ii) Uvicorn
 (iii) Python 3.11
 
-# Frontend -
+Frontend -
 (i) HTML 
 (ii) CSS 
 (iii) JavaScript
 
-# Training -
+Training -
 Google Colab (GPU)
 
 
