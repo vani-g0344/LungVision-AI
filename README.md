@@ -8,7 +8,7 @@ The project combines deep learning, explainable AI, and generative AI to simulat
 
 This is not just a model. It’s a complete AI product.
 
-# What This Project Does:
+# WHAT THE PROJECT DOES?
 
 - User uploads a lung CT scan
 - Deep learning model predicts Benign, Malignant, or Normal
@@ -16,7 +16,7 @@ This is not just a model. It’s a complete AI product.
 - A Large Language Model generates a clear explanation
 - Results are shown via a web UI or Streamlit app
 
-# Model Performance
+# MODEL PERFORMANCE
 
 Metric	                |      Score
                         |
@@ -24,22 +24,20 @@ Metric	                |      Score
 - Validation Accuracy   |       95.7%
 - Test Accuracy	        |      95.8%
 
-# Setup
+# SETUP
 
 1. Clone the repo
 2. pip install -r requirements.txt
 3. python download_model.py   ← downloads model from Google Drive
 4. cp .env.example .env and add your GROQ key
 5. uvicorn backend/app:app --reload
-```
 
 Dataset ->
 - 1,097 CT scans
 - 3 classes: Benign · Malignant · Normal
+- Achieved using transfer learning and fine-tuning on a limited medical dataset, following standard medical AI research practices.
 
-Achieved using transfer learning and fine-tuning on a limited medical dataset, following standard medical AI research practices.
-
-# Technical Stack
+# TECHNICAL STACK
 
 Machine Learning / AI ->
 -PyTorch + TorchVision
@@ -59,7 +57,7 @@ Training ->
 -Google Colab (GPU)
 
 
-# Author
+# AUTHOR
 Vani Gupta
 Second-year | Computer Science Undergraduate
 Aspiring Gen-AI Engineer · Full-Stack AI Developer
