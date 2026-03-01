@@ -1,4 +1,4 @@
-# 🫁LungVision-AI
+# LungVision-AI🫁
 
 - End-to-End AI System for Lung Cancer Detection from CT Scans
 
