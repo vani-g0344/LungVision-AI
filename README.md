@@ -19,10 +19,10 @@ This is not just a model. It’s a complete AI product.
 # MODEL PERFORMANCE
 
 Metric	                |      Score
-                        |
-- Training Accuracy	    |        100%
-- Validation Accuracy   |       95.7%
-- Test Accuracy	        |      95.8%
+                        
+- Training Accuracy	           100%
+- Validation Accuracy          95.7%
+- Test Accuracy	               95.8%
 
 # SETUP
 
