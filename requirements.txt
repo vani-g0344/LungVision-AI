@@ -1,0 +1,18 @@
+cd C:\Users\Lenovo\Documents\Coding\LungVision-AI
+pip freeze | Out-File -Encoding UTF8 -FilePath ".\requirements.txt" -Force
+```
+
+Then open `requirements.txt` in VS Code — it will look something like this automatically:
+```
+fastapi==0.133.0
+uvicorn==0.41.0
+groq==1.0.0
+python-dotenv==1.2.1
+pillow==12.1.1
+torch==2.10.0
+torchvision==0.25.0
+numpy==2.4.2
+httpx==0.28.1
+pydantic==2.12.5
+gdown==5.2.0
+...and more

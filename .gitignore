@@ -1,0 +1,68 @@
+
+# SENSITIVE — NEVER COMMIT
+
+.env
+.env.local
+.env.*.local
+
+
+# ML MODEL WEIGHTS (large files)
+
+*.pth
+*.pt
+*.h5
+*.pkl
+*.onnx
+
+
+# DATASET (large — host on Kaggle/Drive instead)
+
+data/
+dataset/
+datasets/
+*.csv
+*.zip
+*.tar.gz
+*.npy
+*.npz
+
+
+# PYTHON
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+
+# JUPYTER
+
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# TEMP / UPLOADS (runtime files)
+
+uploads/
+temp/
+*.tmp
+*.log
+*.pth
+
+# OS FILES
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# IDE
+.vscode/
+.idea/
+*.swp

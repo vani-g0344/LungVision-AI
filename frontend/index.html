@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LungVision AI</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #070710;
+      color: #e8e8f0;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+      position: relative;
+    }
+
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(#ffffff08 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      z-index: 1;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .logo-icon { font-size: 28px; color: #00e5ff; }
+
+    .logo-text {
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+
+    .logo-ai {
+      font-size: 14px;
+      background: #00e5ff;
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: #ffffff55;
+      letter-spacing: 1px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .dropzone {
+      border: 1px dashed #ffffff22;
+      border-radius: 12px;
+      padding: 40px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      background: #0a0a0f;
+    }
+
+    .dropzone:hover { border-color: #00e5ff44; }
+    .dropzone.dragging { border-color: #00e5ff; background: #00e5ff08; }
+
+    .upload-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .upload-icon { font-size: 40px; color: #00e5ff44; }
+    .upload-text { color: #ffffff88; font-size: 14px; }
+    .upload-sub { color: #ffffff33; font-size: 11px; }
+
+    #preview {
+      max-height: 200px;
+      max-width: 100%;
+      border-radius: 8px;
+      object-fit: contain;
+      display: none;
+    }
+
+    .file-name {
+      font-size: 12px;
+      color: #00e5ff88;
+      display: none;
+    }
+
+    button {
+      background: #00e5ff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.2s;
+    }
+
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-box {
+      background: #ff444422;
+      border: 1px solid #ff444444;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #ff8888;
+      z-index: 1;
+      max-width: 520px;
+      width: 100%;
+      display: none;
+    }
+
+    .result-card {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 520px;
+      background: #0d0d1a;
+      border: 1px solid #ffffff11;
+      border-radius: 12px;
+      padding: 28px;
+      z-index: 1;
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #fff;
+      align-self: flex-start;
+    }
+
+    .confidence-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+    .confidence-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #ffffff88;
+    }
+
+    .confidence-num { color: #00e5ff; font-weight: bold; }
+
+    .bar-bg {
+      background: #ffffff11;
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .scores-wrap { display: flex; flex-direction: column; gap: 10px; }
+
+    .score-item {
+      display: grid;
+      grid-template-columns: 80px 1fr 50px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .score-label {
+      font-size: 11px;
+      color: #ffffff66;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .score-bar-bg {
+      background: #ffffff11;
+      border-radius: 3px;
+      height: 4px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      background: #00e5ff;
+      border-radius: 3px;
+      transition: width 0.8s ease;
+    }
+
+    .score-num {
+      font-size: 11px;
+      color: #ffffff66;
+      text-align: right;
+    }
+
+    .divider { height: 1px; background: #ffffff11; }
+
+    .explanation-label {
+      font-size: 11px;
+      color: #00e5ff;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .explanation-text {
+      font-size: 13px;
+      color: #ffffffcc;
+      line-height: 1.8;
+    }
+
+    .disclaimer {
+      font-size: 11px;
+      color: #ffffff33;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #00000044;
+      border-top: 2px solid #000;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <header>
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">LungVision</span>
+      <span class="logo-ai">AI</span>
+    </div>
+    <p class="tagline">Lung CT Scan Analysis · Powered by Deep Learning + Generative AI</p>
+  </header>
+
+  <div class="card">
+    <div class="dropzone" id="dropzone">
+      <div class="upload-prompt" id="uploadPrompt">
+        <span class="upload-icon">⊕</span>
+        <p class="upload-text">Drop CT scan here or click to upload</p>
+        <p class="upload-sub">Supports JPG, PNG</p>
+      </div>
+      <img id="preview" alt="CT Scan preview" />
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" style="display:none" />
+    <p class="file-name" id="fileName"></p>
+
+    <button id="analyzeBtn" disabled>Analyze Scan</button>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="result-card" id="resultCard">
+    <div class="badge" id="badge"></div>
+
+    <div class="confidence-wrap">
+      <div class="confidence-label">
+        <span>Confidence</span>
+        <span class="confidence-num" id="confidenceNum"></span>
+      </div>
+      <div class="bar-bg">
+        <div class="bar-fill" id="barFill"></div>
+      </div>
+    </div>
+
+    <div class="scores-wrap" id="scoresWrap"></div>
+
+    <!-- Heatmap section -->
+<div id="heatmapSection" style="display:none; flex-direction:column; gap:10px;">
+  <p style="font-size:11px; color:#00e5ff; letter-spacing:1px; text-transform:uppercase; margin:0;">◈ GradCAM Heatmap</p>
+  <p style="font-size:11px; color:#ffffff44; margin:0;">Red areas show where the AI focused to make its prediction</p>
+  <img id="heatmapImg" style="width:100%; border-radius:8px;" />
+</div>
+<div class="divider"></div>
+
+
+    <div>
+      <p class="explanation-label">◈ AI Explanation</p>
+      <p class="explanation-text" id="explanationText"></p>
+    </div>
+
+    <div class="disclaimer">
+      ⚕ This tool is for research purposes only. Always consult a qualified medical professional.
+    </div>
+  </div>
+
+  <script>
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+    const fileName = document.getElementById('fileName');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const errorBox = document.getElementById('errorBox');
+    const resultCard = document.getElementById('resultCard');
+
+    let selectedFile = null;
+
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragging');
+    });
+
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragging'));
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragging');
+      const f = e.dataTransfer.files[0];
+      if (f) handleFile(f);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) handleFile(e.target.files[0]);
+    });
+
+    function handleFile(f) {
+      selectedFile = f;
+      const url = URL.createObjectURL(f);
+      preview.src = url;
+      preview.style.display = 'block';
+      uploadPrompt.style.display = 'none';
+      fileName.textContent = '📎 ' + f.name;
+      fileName.style.display = 'block';
+      analyzeBtn.disabled = false;
+      resultCard.style.display = 'none';
+      errorBox.style.display = 'none';
+    }
+
+    analyzeBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = '<span class="spinner"></span>Analyzing...';
+      errorBox.style.display = 'none';
+      resultCard.style.display = 'none';
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/predict', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error('Server error');
+        const data = await res.json();
+        showResult(data);
+      } catch (err) {
+        errorBox.textContent = '⚠ Something went wrong. Make sure the backend is running.';
+        errorBox.style.display = 'block';
+      } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = 'Analyze Scan';
+      }
+    });
+
+    function getBadgeColor(prediction) {
+      if (prediction === 'Malignant') return '#ff4444';
+      if (prediction === 'Benign') return '#f5a623';
+      return '#00c853';
+    }
+
+    function getBadgeLabel(prediction) {
+      if (prediction === 'Malignant') return '⚠ Malignant';
+      if (prediction === 'Benign') return '◎ Benign';
+      return '✓ Normal';
+    }
+
+    function showResult(data) {
+      const color = getBadgeColor(data.prediction);
+
+      document.getElementById('badge').textContent = getBadgeLabel(data.prediction);
+      document.getElementById('badge').style.background = color;
+      document.getElementById('confidenceNum').textContent = data.confidence + '%';
+      document.getElementById('barFill').style.width = data.confidence + '%';
+      document.getElementById('barFill').style.background = color;
+      document.getElementById('explanationText').textContent = data.explanation;
+
+      const scoresWrap = document.getElementById('scoresWrap');
+      scoresWrap.innerHTML = '';
+      for (const [label, score] of Object.entries(data.all_scores)) {
+        scoresWrap.innerHTML += `
+          <div class="score-item">
+            <div class="score-label">${label}</div>
+            <div class="score-bar-bg">
+              <div class="score-bar-fill" style="width:${score}%"></div>
+            </div>
+            <div class="score-num">${score}%</div>
+          </div>
+        `;
+      }
+
+      resultCard.style.display = 'flex';
+
+// Show heatmap
+if (data.heatmap) {
+  document.getElementById('heatmapImg').src = data.heatmap;
+  document.getElementById('heatmapSection').style.display = 'flex';
+}
+
+    }
+  </script>
+</body>
+</html>
