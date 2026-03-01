@@ -11,3 +11,4 @@ pydantic
 gdown
 opencv-python-headless
 python-multipart
+aiofiles
