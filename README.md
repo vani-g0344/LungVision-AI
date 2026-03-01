@@ -6,7 +6,7 @@ emoji: 🫁
 
 colorFrom: blue
 
-colorTo: cyan
+colorTo: indigo
 
 sdk: docker
 
