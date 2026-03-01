@@ -10,3 +10,4 @@ httpx
 pydantic
 gdown
 opencv-python-headless
+python-multipart
