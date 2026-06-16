@@ -55,6 +55,7 @@ temp/
 *.tmp
 *.log
 *.pth
+demo.gif
 
 # OS FILES
 .DS_Store
