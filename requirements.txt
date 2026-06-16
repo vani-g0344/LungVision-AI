@@ -12,3 +12,4 @@ gdown
 opencv-python-headless
 python-multipart
 aiofiles
+huggingface_hub
