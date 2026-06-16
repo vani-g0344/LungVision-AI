@@ -1,3 +1,12 @@
+---
+title: LungVision AI
+emoji: 🫁
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # LungVision AI 🫁
 
 - End-to-End AI System for Lung Cancer Detection from CT Scans
