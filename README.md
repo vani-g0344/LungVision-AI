@@ -46,12 +46,12 @@ Achieved using transfer learning and fine-tuning on a limited medical dataset, f
 
 #  Local Setup
 
-1. git clone https://github.com/vani-g0344/LungVision-AI.git
+1. git clone https://github.com/vanigupta-dev/LungVision-AI.git
 2. cd LungVision-AI
 3. pip install -r requirements.txt
 4. python download_model.py
-4. cp .env.example .env        # add your GROQ_API_KEY
-5. uvicorn backend.app:app --reload
+5. cp .env.example .env        # add your GROQ_API_KEY
+6. uvicorn backend.app:app --reload
 
 
 
@@ -85,7 +85,7 @@ Achieved using transfer learning and fine-tuning on a limited medical dataset, f
 #  Author
 
 **Vani Gupta**
-Second-year | Computer Science Undergraduate
+Third-year | Computer Science Undergraduate
 Aspiring Gen-AI Engineer · Full-Stack AI Developer
 
 
