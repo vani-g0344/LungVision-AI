@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from pathlib import Path
 from groq import Groq
+from groq import APIError, APITimeoutError, RateLimitError
 from inference import load_model, predict # pyright: ignore[reportMissingImports]
 from gradcam import GradCAM # type: ignore
 import tempfile
@@ -77,20 +78,40 @@ def get_explanation(prediction: str, confidence: float, all_scores: dict) -> str
 Write a clear, compassionate explanation in simple human language (3-4 sentences). Recommend consulting a doctor."""
 
     try:
+        # Enforce a strict 5.0-second timeout to stop latency spikes
         response = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=300,
             temperature=0.7,
+            timeout=5.0  # <--- Added Timeout Guard
         )
         return response.choices[0].message.content # pyright: ignore[reportReturnType]
+
+    except APITimeoutError:
+        # Specifically handle latency spikes (> 5 seconds)
+        logger.warning("Groq API request timed out after 5 seconds. Triggering fallback response.")
+        return (
+            f"The scan shows {prediction} patterns with {confidence:.1f}% confidence. "
+            "Note: Detailed AI explanations are delayed due to high server load. "
+            "Please consult a qualified medical professional for an in-depth evaluation."
+        )
+
+    except RateLimitError:
+        # Specifically handle HTTP 429 Rate Limits
+        logger.warning("Groq API rate limit hit (429). Serving fallback explanation.")
+        return (
+            f"The scan indicates {prediction} patterns with {confidence:.1f}% confidence. "
+            "AI service quota exceeded; please consult a medical doctor for full diagnostic review."
+        )
+
     except Exception as e:
-        logger.error(f"GROQ API error: {e}")
+        # Fallback for any other unexpected API error
+        logger.error(f"Unexpected GROQ API error: {e}")
         return (
             f"The scan shows {prediction} patterns with {confidence:.1f}% confidence. "
             "Please consult a qualified doctor for proper medical evaluation."
         )
-
 
 @app.post("/predict")
 async def predict_image(file: UploadFile = File(...)):
